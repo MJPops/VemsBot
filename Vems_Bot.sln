@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vems_Bot", "Vems_Bot\Vems_Bot.csproj", "{E4BB7E5B-2323-48DA-9E92-0C5096D2E911}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4BB7E5B-2323-48DA-9E92-0C5096D2E911}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4BB7E5B-2323-48DA-9E92-0C5096D2E911}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4BB7E5B-2323-48DA-9E92-0C5096D2E911}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4BB7E5B-2323-48DA-9E92-0C5096D2E911}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {669D2DEA-8D59-4237-B637-9E5913439090}
+	EndGlobalSection
+EndGlobal
