@@ -1,6 +1,5 @@
 ﻿using HelloApp;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -11,7 +10,7 @@ namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "Токен сюда";
+        private static string token { get; set; } = "2065215367:AAHxs51AowRJAqefe3tvV7d5jn5nsC_-xDc";
         private static TelegramBotClient client;
 
         

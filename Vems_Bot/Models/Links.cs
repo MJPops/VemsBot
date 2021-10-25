@@ -1,6 +1,4 @@
-﻿using Telegram.Bot.Types.InputFiles;
-
-namespace Vems_Bot
+﻿namespace Vems_Bot
 {
     class Links
     {
