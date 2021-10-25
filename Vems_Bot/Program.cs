@@ -11,7 +11,7 @@ namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "Токен Сюда";
+        private static string token { get; set; } = "2065215367:AAHxs51AowRJAqefe3tvV7d5jn5nsC_-xDc";
         private static TelegramBotClient client;
 
         
@@ -188,83 +188,83 @@ namespace Vems_Bot
                         }
                     }
                 }
-            }
-            else if (message.Text.Length >= 7)
-            {
-                try
+                else if (message.Text.Length >= 7)
                 {
-                    if (message.Text.Substring(0, 7) == "4365reg")
+                    try
                     {
-                        try
+                        if (message.Text.Substring(0, 7) == "4365reg")
                         {
-                            string[] registrateParametrs = message.Text.Split("|");
+                            try
+                            {
+                                string[] registrateParametrs = message.Text.Split("|");
+                                using (ApplicationContext dataBase = new ApplicationContext())
+                                {
+                                    var users = dataBase.Users.ToList();
+                                    bool error = true;
+
+                                    if (registrateParametrs[1].Length != 4)
+                                    {
+                                        error = false;
+                                        await client.SendTextMessageAsync(message.Chat.Id, "id должен содержать ровно 4 символа");
+                                    }
+
+                                    else
+                                    {
+                                        foreach (VemsUser user in users)
+                                        {
+                                            if (user.id == registrateParametrs[1])
+                                            {
+                                                error = false;
+                                                await client.SendTextMessageAsync(message.Chat.Id, "Такой id уже существует");
+                                            }
+                                        }
+                                    }
+
+                                    if (error)
+                                    {
+                                        VemsUser newUser = new VemsUser
+                                        {
+                                            id = registrateParametrs[1],
+                                            name = registrateParametrs[2],
+                                            course = registrateParametrs[3],
+                                            documentLink = registrateParametrs[4],
+                                            description = registrateParametrs[5]
+                                        };
+                                        dataBase.Users.Add(newUser);
+                                        dataBase.SaveChanges();
+                                        await client.SendTextMessageAsync(message.Chat.Id, "Пользователь зарегистрирован");
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                await client.SendTextMessageAsync(message.Chat.Id, "Ошибка ввода");
+                            }
+                        }
+                        else if (message.Text.Substring(0, 7) == "4365del")
+                        {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
                                 var users = dataBase.Users.ToList();
-                                bool error = true;
+                                VemsUser delitedUser = new VemsUser();
 
-                                if (registrateParametrs[1].Length != 4)
+                                foreach (VemsUser user in users)
                                 {
-                                    error = false;
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id должен содержать ровно 4 символа");
-                                }
-
-                                else
-                                {
-                                    foreach (VemsUser user in users)
+                                    if (user.id == message.Text.Substring(7))
                                     {
-                                        if (user.id == registrateParametrs[1])
-                                        {
-                                            error = false;
-                                            await client.SendTextMessageAsync(message.Chat.Id, "Такой id уже существует");
-                                        }
+                                        delitedUser = user;
                                     }
                                 }
-
-                                if (error)
-                                {
-                                    VemsUser newUser = new VemsUser
-                                    {
-                                        id = registrateParametrs[1],
-                                        name = registrateParametrs[2],
-                                        course = registrateParametrs[3],
-                                        documentLink = registrateParametrs[4],
-                                        description = registrateParametrs[5]
-                                    };
-                                    dataBase.Users.Add(newUser);
-                                    dataBase.SaveChanges();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Пользователь зарегистрирован");
-                                }
+                                dataBase.Users.RemoveRange(delitedUser);
+                                dataBase.SaveChanges();
+                                await client.SendTextMessageAsync(message.Chat.Id, "Пользователь удален");
                             }
                         }
-                        catch
-                        {
-                            await client.SendTextMessageAsync(message.Chat.Id, "Ошибка ввода");
-                        }
                     }
-                    else if (message.Text.Substring(0, 7) == "4365del")
+                    catch
                     {
-                        using (ApplicationContext dataBase = new ApplicationContext())
-                        {
-                            var users = dataBase.Users.ToList();
-                            VemsUser delitedUser = new VemsUser();
-
-                            foreach (VemsUser user in users)
-                            {
-                                if (user.id == message.Text.Substring(7))
-                                {
-                                    delitedUser = user;
-                                }
-                            }
-                            dataBase.Users.RemoveRange(delitedUser);
-                            dataBase.SaveChanges();
-                            await client.SendTextMessageAsync(message.Chat.Id, "Пользователь удален");
-                        }
+                        await client.SendTextMessageAsync(message.Chat.Id, "Такого id не существует");
                     }
-                }
-                catch (Exception)
-                {
-                    await client.SendTextMessageAsync(message.Chat.Id, "Такого id не существует");
                 }
             }
 
