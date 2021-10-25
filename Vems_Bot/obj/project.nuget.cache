@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FAmUjj3KcLDpaEt2n4iuEJsvf4Iac0aGVHFaoAozkVpOYHloNU8bvksQhomKeiJ3tw7rFssUfyOqVhk1CLdv5A==",
+  "dgSpecHash": "FwiHWyZSsixR2iu2ZnIKnPGv1uWD8DMCCxo32XJBAQ3FkykOxlIq7JuQ4Ujd0c9Oon1qcA4J1/5xvm8lX+iosw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\Visual Studio 2019\\C# Project\\Console\\Vems_Bot\\Vems_Bot\\Vems_Bot.csproj",
+  "projectFilePath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\GitHub\\VemsBot\\Vems_Bot\\Vems_Bot.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Aleksandr\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Aleksandr\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
