@@ -143,7 +143,7 @@ namespace Vems_Bot
 
             else if (message.Text == "Порядок регистрации")
             {
-                await client.SendTextMessageAsync(message.Chat.Id, "▫ Пример: reg|id|Имя|Курс|Ссылка|Описание\n\n▫ id должен содержать 4 цифры");
+                await client.SendTextMessageAsync(message.Chat.Id, "▫ Пример: reg|id|Имя|Курс|Ссылка|Описание\n\n▫ id должен содержать 4 символа");
                 await client.SendTextMessageAsync(message.Chat.Id, "▫ Шаблон: reg|||||");
             }
             else if (message.Text.Substring(0, 3) == "reg")
@@ -154,18 +154,27 @@ namespace Vems_Bot
                     using (ApplicationContext dataBase = new ApplicationContext())
                     {
                         var users = dataBase.Users.ToList();
-                        int error = 0;
+                        bool error = false;
 
-                        foreach (VemsUser user in users)
+                        if (registrateParametrs.Length != 4)
                         {
-                            if (user.id == registrateParametrs[1])
+                            error = false;
+                            await client.SendTextMessageAsync(message.Chat.Id, "id должен содержать ровно 4 символа");
+                        }
+
+                        else
+                        {
+                            foreach (VemsUser user in users)
                             {
-                                error = 1;
-                                await client.SendTextMessageAsync(message.Chat.Id, "Такой id уже существует");
+                                if (user.id == registrateParametrs[1])
+                                {
+                                    error = false;
+                                    await client.SendTextMessageAsync(message.Chat.Id, "Такой id уже существует");
+                                }
                             }
                         }
 
-                        if (error != 1)
+                        if (error)
                         {
                             VemsUser newUser = new VemsUser
                             {
