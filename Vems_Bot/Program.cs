@@ -159,38 +159,38 @@ namespace Vems_Bot
                 await client.SendTextMessageAsync(message.Chat.Id, "▫ Пример: reg|id|Имя|Курс|Ссылка|Описание\n\n▫ id должен содержать 4 символа");
                 await client.SendTextMessageAsync(message.Chat.Id, "▫ Шаблон: reg|||||");
             }
+            else if (message.Text.Substring(0, 2) == "id")
+            {
+                using (ApplicationContext dataBase = new ApplicationContext())
+                {
+                    var users = dataBase.Users.ToList();
+                    int error = 0;
+
+                    await client.SendTextMessageAsync(message.Chat.Id, $"Пользователи с id{message.Text.Substring(2)}");
+
+                    foreach (VemsUser user in users)
+                    {
+                        if (user.id == message.Text.Substring(2))
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, $"▫ Здравствуйте, {user.name}, на данный момент вам " +
+                                $"доступны следующие документы по курсу {user.course}👇");
+                            await client.SendTextMessageAsync(message.Chat.Id, $"Ссылка: {user.documentLink}");
+                            await client.SendTextMessageAsync(message.Chat.Id, $"{user.description}");
+                            error = 1;
+                        }
+                    }
+                    if (error == 0)
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "▫ Такого пользователь не существует\n\n" +
+                            "▫ Проверьте корректность id или уточните у преподавателя, добавил ли он вас");
+                    }
+                }
+            }
             else if (message.Text.Length >= 7)
             {
                 try
                 {
-                    if (message.Text.Substring(0, 2) == "id")
-                    {
-                        using (ApplicationContext dataBase = new ApplicationContext())
-                        {
-                            var users = dataBase.Users.ToList();
-                            int error = 0;
-
-                            await client.SendTextMessageAsync(message.Chat.Id, $"Пользователи с id{message.Text.Substring(2)}");
-
-                            foreach (VemsUser user in users)
-                            {
-                                if (user.id == message.Text.Substring(2))
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, $"▫ Здравствуйте, {user.name}, на данный момент вам " +
-                                        $"доступны следующие документы по курсу {user.course}👇");
-                                    await client.SendTextMessageAsync(message.Chat.Id, $"Ссылка: {user.documentLink}");
-                                    await client.SendTextMessageAsync(message.Chat.Id, $"{user.description}");
-                                    error = 1;
-                                }
-                            }
-                            if (error == 0)
-                            {
-                                await client.SendTextMessageAsync(message.Chat.Id, "▫ Такого пользователь не существует\n\n" +
-                                    "▫ Проверьте корректность id или уточните у преподавателя, добавил ли он вас");
-                            }
-                        }
-                    }
-                    else if (message.Text.Substring(0, 7) == "4365reg")
+                    if (message.Text.Substring(0, 7) == "4365reg")
                     {
                         try
                         {

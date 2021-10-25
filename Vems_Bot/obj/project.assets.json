@@ -7304,11 +7304,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\GitHub\\VemsBot\\Vems_Bot\\Vems_Bot.csproj",
+      "projectUniqueName": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\Visual Studio 2019\\C# Project\\Console\\Vems_Bot\\Vems_Bot\\Vems_Bot.csproj",
       "projectName": "Vems_Bot",
-      "projectPath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\GitHub\\VemsBot\\Vems_Bot\\Vems_Bot.csproj",
+      "projectPath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\Visual Studio 2019\\C# Project\\Console\\Vems_Bot\\Vems_Bot\\Vems_Bot.csproj",
       "packagesPath": "C:\\Users\\Aleksandr\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\GitHub\\VemsBot\\Vems_Bot\\obj\\",
+      "outputPath": "C:\\Users\\Aleksandr\\OneDrive\\Документы\\Visual Studio 2019\\C# Project\\Console\\Vems_Bot\\Vems_Bot\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Aleksandr\\AppData\\Roaming\\NuGet\\NuGet.Config",
