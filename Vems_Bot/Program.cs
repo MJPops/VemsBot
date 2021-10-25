@@ -1,14 +1,20 @@
-﻿using System;
+﻿using HelloApp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Vems_Bot.Models;
+
 
 namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "ТОКЕН СЮДА";
+        private static string token { get; set; } = "2065215367:AAHxs51AowRJAqefe3tvV7d5jn5nsC_-xDc";
         private static TelegramBotClient client;
 
+        
         [Obsolete]
         static void Main(string[] args)
         {
@@ -134,6 +140,100 @@ namespace Vems_Bot
                     firstName: "Ева,",
                     lastName: "менеджер");
             }
+
+            else if (message.Text == "Порядок регистрации")
+            {
+                await client.SendTextMessageAsync(message.Chat.Id, "▫ Пример: reg|id|Имя|Курс|Ссылка|Описание\n\n▫ id должен содержать 4 цифры");
+                await client.SendTextMessageAsync(message.Chat.Id, "▫ Шаблон: reg|||||");
+            }
+            else if (message.Text.Substring(0, 3) == "reg")
+            {
+                try
+                {
+                    string[] registrateParametrs = message.Text.Split("|");
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var users = dataBase.Users.ToList();
+                        int error = 0;
+
+                        foreach (VemsUser user in users)
+                        {
+                            if (user.id == registrateParametrs[1])
+                            {
+                                error = 1;
+                                await client.SendTextMessageAsync(message.Chat.Id, "Такой id уже существует");
+                            }
+                        }
+
+                        if (error != 1)
+                        {
+                            VemsUser newUser = new VemsUser
+                            {
+                                id = registrateParametrs[1],
+                                name = registrateParametrs[2],
+                                course = registrateParametrs[3],
+                                documentLink = registrateParametrs[4],
+                                description = registrateParametrs[5]
+                            };
+                            dataBase.Users.Add(newUser);
+                            dataBase.SaveChanges();
+                            await client.SendTextMessageAsync(message.Chat.Id, "Пользователь зарегистрирован");
+                        }
+                    }
+                }
+                catch 
+                {
+                    await client.SendTextMessageAsync(message.Chat.Id, "Ошибка ввода");
+                }
+            }
+            else if (message.Text.Substring(0, 2) == "id")
+            {
+                using (ApplicationContext dataBase = new ApplicationContext())
+                {
+                    var users = dataBase.Users.ToList();
+                    int error = 0;
+
+                    await client.SendTextMessageAsync(message.Chat.Id, $"Пользователи с id{message.Text.Substring(2)}");
+
+                    foreach (VemsUser user in users)
+                    {
+                        if (user.id == message.Text.Substring(2))
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, $"▫ Здравствуйте, {user.name}, на данный момент вам " +
+                                $"доступны следующие документы по курсу {user.course}👇");
+                            await client.SendTextMessageAsync(message.Chat.Id, $"Ссылка: {user.documentLink}");
+                            await client.SendTextMessageAsync(message.Chat.Id, $"{user.description}");
+                            error = 1;
+                        }
+                    }
+                    if (error==0)
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "▫ Такого пользователь не существует\n\n" +
+                            "▫ Проверьте корректность id или уточните у преподавателя, добавил ли он вас");
+                    }
+                }
+            }
+            else if (message.Text.Substring(0, 3) == "del")
+            {
+                using (ApplicationContext dataBase = new ApplicationContext())
+                {
+                    var users = dataBase.Users.ToList();
+                    VemsUser delitedUser = new VemsUser();
+
+                    foreach (VemsUser user in users)
+                    {
+                        if (user.id == message.Text.Substring(3))
+                        {
+                            delitedUser = user;
+                        }
+                    }
+                    dataBase.Users.RemoveRange(delitedUser);
+                    dataBase.SaveChanges();
+                    await client.SendTextMessageAsync(message.Chat.Id, "Пользователь удален");
+                }
+            }
+
+
             else
             {
                 await client.SendTextMessageAsync(message.Chat.Id, "Я так не умею");
