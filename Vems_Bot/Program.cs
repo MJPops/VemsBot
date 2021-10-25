@@ -10,7 +10,7 @@ namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "Токен";
+        private static string token { get; set; } = "2065215367:AAHxs51AowRJAqefe3tvV7d5jn5nsC_-xDc";
         private static TelegramBotClient client;
 
         
@@ -174,8 +174,8 @@ namespace Vems_Bot
                             if (user.id == message.Text.Substring(2))
                             {
                                 await client.SendTextMessageAsync(message.Chat.Id, $"▫ Здравствуйте, {user.name}, на данный момент вам " +
-                                    $"доступны следующие документы по курсу {user.course}👇");
-                                await client.SendTextMessageAsync(message.Chat.Id, $"Ссылка: {user.documentLink}");
+                                    $"доступны следующие документы по курсу {user.course}👇",
+                                    replyMarkup: Button.DocumentLink(user.documentLink));
                                 await client.SendTextMessageAsync(message.Chat.Id, $"{user.description}");
                                 error = 1;
                             }

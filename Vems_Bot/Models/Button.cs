@@ -95,5 +95,13 @@ namespace Vems_Bot
             });
             ;
         }
+        public static IReplyMarkup DocumentLink(string link)
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                    new List<InlineKeyboardButton>{ InlineKeyboardButton.WithUrl(text: "Материалы", url: link) }
+            });
+            ;
+        }
     }
 }
