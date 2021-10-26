@@ -10,7 +10,7 @@ namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "2065215367:AAHxs51AowRJAqefe3tvV7d5jn5nsC_-xDc";
+        private static string token { get; set; } = "Токен";
         private static TelegramBotClient client;
 
         
@@ -201,8 +201,8 @@ namespace Vems_Bot
                                         documentLink = registrateParametrs[4],
                                         description = registrateParametrs[5]
                                     };
-                                    dataBase.Users.Add(newUser);
-                                    dataBase.SaveChanges();
+                                    await dataBase.Users.AddAsync(newUser);
+                                    await dataBase.SaveChangesAsync();
                                     await client.SendTextMessageAsync(message.Chat.Id, "Пользователь зарегистрирован");
                                 }
                             }
