@@ -50,7 +50,7 @@ namespace Vems_Bot
 
             else if (message.Text == "Курсы")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesHeded);
 
@@ -59,53 +59,53 @@ namespace Vems_Bot
 
             else if (message.Text == "Веб направление")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesWeb,
                     replyMarkup:Button.WebCourses());
             }
             else if (message.Text == "Веб-Дизайн")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.webDesign);
             }
             else if (message.Text == "Java- и  TypeScript")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.webDevelop);
             }
             else if (message.Text == "JavaScript и фреймворки")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.webFramework);
             }
 
             else if (message.Text == "Языки и ООП")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesProgramming,
                     replyMarkup: Button.ProgrammingCourses());
             }
             else if (message.Text == "Основы программирования")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.programmingBasics);
             }
             else if (message.Text == "ООП")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.programmingOOP);
             }
 
             else if (message.Text == "Репетиторство")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesTutoring,
                     replyMarkup: Button.TutoringCourses());
@@ -118,11 +118,11 @@ namespace Vems_Bot
             }
             else if (message.Text == "Преподаватели")
             {
-                var photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.matvey);
 
-                photo = await client.SendPhotoAsync(
+                await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.sasha);
             }
