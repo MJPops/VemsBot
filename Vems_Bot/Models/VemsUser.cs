@@ -7,5 +7,13 @@
         public string course { get; set; }
         public string documentLink { get; set; }
         public string description { get; set; }
+
+        public VemsUser()
+        {
+            name = null;
+            course = null;
+            documentLink = null;
+            description = null;
+        }
     }
 }
