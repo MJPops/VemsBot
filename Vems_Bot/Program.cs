@@ -1,6 +1,7 @@
 ﻿using HelloApp;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Vems_Bot.Models;
@@ -22,6 +23,7 @@ namespace Vems_Bot
                 client = new TelegramBotClient(token);
                 client.StartReceiving();
                 client.OnMessage += OnMessageHandler;
+                client.OnCallbackQuery += OnCallbackQweryHandlerAsync;
                 Console.ReadLine();
                 client.StopReceiving();
             }
@@ -32,92 +34,91 @@ namespace Vems_Bot
         }
 
         [Obsolete]
-        private static async void OnMessageHandler(object sender, MessageEventArgs e)
+        private static async void OnCallbackQweryHandlerAsync(object sender, CallbackQueryEventArgs e)
         {
-            var message = e.Message;
-            bool unknownMessage = false;
-            string pasword = "2143";
+            var message = e.CallbackQuery.Message;
 
-            if(message.Text != null)
+            if (e.CallbackQuery.Data != null)
             {
-                Console.WriteLine($"Пришло сообщение с текстом: {message.Text}");
+                Console.WriteLine($"Нажата кнопка: {e.CallbackQuery.Data}");
             }
-            
-            if (message.Text == "/start")
+            if (e.CallbackQuery.Data == "/start")
             {
                 await client.SendTextMessageAsync(message.Chat.Id, Messages.start, replyMarkup: Button.Start());
             }
 
-
-            else if (message.Text == "Курсы")
+            if (e.CallbackQuery.Data == "Курсы")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.coursesHeded);
-
-                await client.SendTextMessageAsync(message.Chat.Id, Messages.headCourses, replyMarkup: Button.HededCourses());
+                    photo: Links.coursesHeded,
+                    replyMarkup: Button.HededCourses());
             }
 
-            else if (message.Text == "Веб направление")
+            else if (e.CallbackQuery.Data == "Веб направление")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesWeb,
-                    replyMarkup:Button.WebCourses());
+                    replyMarkup: Button.WebCourses());
             }
-            else if (message.Text == "Веб-Дизайн")
+            else if (e.CallbackQuery.Data == "Веб-Дизайн")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.webDesign);
+                    photo: Links.webDesign,
+                    replyMarkup: Button.CoursesStartBack("Веб направление"));
             }
-            else if (message.Text == "Java- и  TypeScript")
+            else if (e.CallbackQuery.Data == "Java- и  TypeScript")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.webDevelop);
+                    photo: Links.webDevelop,
+                    replyMarkup: Button.CoursesStartBack("Веб направление"));
             }
-            else if (message.Text == "JavaScript и фреймворки")
+            else if (e.CallbackQuery.Data == "JavaScript и фреймворки")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.webFramework);
+                    photo: Links.webFramework,
+                    replyMarkup: Button.CoursesStartBack("Веб направление"));
             }
 
-            else if (message.Text == "Языки и ООП")
+            else if (e.CallbackQuery.Data == "Языки и ООП")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesProgramming,
                     replyMarkup: Button.ProgrammingCourses());
             }
-            else if (message.Text == "Основы программирования")
+            else if (e.CallbackQuery.Data == "Основы программирования")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.programmingBasics);
+                    photo: Links.programmingBasics,
+                    replyMarkup: Button.CoursesStartBack("Веб направление"));
             }
-            else if (message.Text == "ООП")
+            else if (e.CallbackQuery.Data == "ООП")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.programmingOOP);
+                    photo: Links.programmingOOP,
+                    replyMarkup: Button.CoursesStartBack("Веб направление"));
             }
 
-            else if (message.Text == "Репетиторство")
+            else if (e.CallbackQuery.Data == "Репетиторство")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.coursesTutoring,
-                    replyMarkup: Button.TutoringCourses());
+                    replyMarkup: Button.CoursesStart());
             }
 
-
-            else if (message.Text == "О Нас")
+            else if (e.CallbackQuery.Data == "О Нас")
             {
-                await client.SendTextMessageAsync(message.Chat.Id, Messages.aboutUs);
+                await client.SendTextMessageAsync(message.Chat.Id, Messages.aboutUs, replyMarkup:Button.GoToStart());
             }
-            else if (message.Text == "Преподаватели")
+            else if (e.CallbackQuery.Data == "Преподаватели")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
@@ -125,13 +126,14 @@ namespace Vems_Bot
 
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
-                    photo: Links.sasha);
+                    photo: Links.sasha,
+                    replyMarkup: Button.GoToStart());
             }
-            else if (message.Text == "Анкета для регистрации")
+            else if (e.CallbackQuery.Data == "Анкета для регистрации")
             {
                 await client.SendTextMessageAsync(message.Chat.Id, Messages.form, replyMarkup: Button.Form());
             }
-            else if (message.Text == "Контакты")
+            else if (e.CallbackQuery.Data == "Контакты")
             {
                 await client.SendTextMessageAsync(message.Chat.Id, Messages.contscts, replyMarkup: Button.Contacts());
 
@@ -139,10 +141,19 @@ namespace Vems_Bot
                     message.Chat.Id,
                     phoneNumber: "79609044065",
                     firstName: "Ева,",
-                    lastName: "менеджер");
+                    lastName: "менеджер",
+                    replyMarkup: Button.GoToStart());
             }
+        }
 
-            else if (message.Text == pasword + "users")
+        [Obsolete]
+        private static async void OnMessageHandler(object sender, MessageEventArgs e)
+        {
+            var message = e.Message;
+            bool unknownMessage = false;
+            string pasword = "2143";
+
+            if (message.Text == pasword + "users")
             {
                 using (ApplicationContext dataBase = new ApplicationContext())
                 {
@@ -431,7 +442,6 @@ namespace Vems_Bot
                 }
             }
             
-
             else
             {
                 await client.SendTextMessageAsync(message.Chat.Id, "Я так не умею");
