@@ -173,6 +173,10 @@ namespace Vems_Bot
                     }
                 }
             }
+            if (message.Text == "/start")
+            {
+                await client.SendTextMessageAsync(message.Chat.Id, Messages.start, replyMarkup: Button.Start());
+            }
             else if (message.Text == "Служебные команды")
             {
                 await client.SendTextMessageAsync(message.Chat.Id, Messages.registrationProcedure);

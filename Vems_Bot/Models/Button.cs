@@ -138,7 +138,6 @@ namespace Vems_Bot
                 },
                 new List<InlineKeyboardButton>
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "Курсы", callbackData: "Курсы"),
                     InlineKeyboardButton.WithCallbackData(text: "Основное меню", callbackData: "/start") 
                 }
             });
