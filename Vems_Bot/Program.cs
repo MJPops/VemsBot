@@ -1,7 +1,6 @@
 ﻿using HelloApp;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
 using Vems_Bot.Models;
@@ -153,6 +152,7 @@ namespace Vems_Bot
             bool unknownMessage = false;
             string pasword = "2143";
 
+
             if (message.Text == pasword + "users")
             {
                 using (ApplicationContext dataBase = new ApplicationContext())
@@ -173,7 +173,7 @@ namespace Vems_Bot
                     }
                 }
             }
-            if (message.Text == "/start")
+            else if (message.Text == "/start")
             {
                 await client.SendTextMessageAsync(message.Chat.Id, Messages.start, replyMarkup: Button.Start());
             }
@@ -268,8 +268,8 @@ namespace Vems_Bot
 
                             if (notError)
                             {
-                                dataBase.Users.Add(newUser);
-                                dataBase.SaveChanges();
+                                dataBase.Add(newUser);
+                                await dataBase.SaveChangesAsync();
                                 await client.SendTextMessageAsync(message.Chat.Id, "Id зарегистрирован");
                             }
                         }
@@ -294,7 +294,7 @@ namespace Vems_Bot
                                 {
                                     dataBase.Users.RemoveRange(user);
                                 }
-                                dataBase.SaveChanges();
+                                await dataBase.SaveChangesAsync();
                                 await client.SendTextMessageAsync(message.Chat.Id, "Пользователь удален");
                             }
                         }
@@ -321,8 +321,9 @@ namespace Vems_Bot
                                     {
                                         user.name = message.Text.Substring(13);
                                     }
+                                    await dataBase.SaveChangesAsync();
                                     await client.SendTextMessageAsync(message.Chat.Id, "Имя добавлено");
-                                    dataBase.SaveChanges();
+
                                 }
                             }
                         }
@@ -346,8 +347,9 @@ namespace Vems_Bot
                                     {
                                         user.course = message.Text.Substring(13);
                                     }
+                                    await dataBase.SaveChangesAsync();
                                     await client.SendTextMessageAsync(message.Chat.Id, "Наименование курса добавлено");
-                                    dataBase.SaveChanges();
+                                    
                                 }
                             }
                         }
@@ -371,8 +373,8 @@ namespace Vems_Bot
                                     {
                                         user.documentLink = message.Text.Substring(13);
                                     }
+                                    await dataBase.SaveChangesAsync();
                                     await client.SendTextMessageAsync(message.Chat.Id, "Ссылка добавлена");
-                                    dataBase.SaveChanges();
                                 }
                             }
                         }
@@ -396,8 +398,8 @@ namespace Vems_Bot
                                     {
                                         user.description = message.Text.Substring(13);
                                     }
+                                    await dataBase.SaveChangesAsync();
                                     await client.SendTextMessageAsync(message.Chat.Id, "Описание добавлено");
-                                    dataBase.SaveChanges();
                                 }
                             }
                         }
