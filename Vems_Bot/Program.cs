@@ -10,7 +10,7 @@ namespace Vems_Bot
 {
     class Program
     {
-        private static string token { get; set; } = "Токен";
+        private static string token { get; set; } = "Token";
         private static TelegramBotClient client;
 
         
@@ -95,14 +95,14 @@ namespace Vems_Bot
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.programmingBasics,
-                    replyMarkup: Button.CoursesStartBack("Веб направление"));
+                    replyMarkup: Button.CoursesStartBack("Языки и ООП"));
             }
             else if (e.CallbackQuery.Data == "ООП")
             {
                 await client.SendPhotoAsync(
                     chatId: message.Chat.Id,
                     photo: Links.programmingOOP,
-                    replyMarkup: Button.CoursesStartBack("Веб направление"));
+                    replyMarkup: Button.CoursesStartBack("Языки и ООП"));
             }
 
             else if (e.CallbackQuery.Data == "Репетиторство")
