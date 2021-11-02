@@ -187,12 +187,11 @@ namespace Vems_Bot
                 {
                     using (ApplicationContext dataBase = new ApplicationContext())
                     {
-                        var users = dataBase.Users.ToList();
                         bool idWorked = false;
 
                         await client.SendTextMessageAsync(message.Chat.Id, $"Пользователь с id{message.Text.Substring(2)}");
 
-                        var selectedUser = from user in users
+                        var selectedUser = from user in dataBase.Users
                                            where user.id == message.Text.Substring(2)
                                            select user;
 
@@ -245,7 +244,6 @@ namespace Vems_Bot
                         using (ApplicationContext dataBase = new ApplicationContext())
                         {
                             VemsUser newUser = new VemsUser { id = message.Text.Substring(7) };
-                            var users = dataBase.Users.ToList();
                             bool notError = true;
 
                             if (message.Text.Substring(7).Length != 4)
@@ -255,7 +253,7 @@ namespace Vems_Bot
                             }
                             else
                             {
-                                var selectedUser = from user in users
+                                var selectedUser = from user in dataBase.Users
                                                    where user.id == message.Text.Substring(7)
                                                    select user;
 
@@ -278,9 +276,7 @@ namespace Vems_Bot
                     {
                         using (ApplicationContext dataBase = new ApplicationContext())
                         {
-                            var users = dataBase.Users.ToList();
-
-                            var selectedUser = from user in users
+                            var selectedUser = from user in dataBase.Users
                                                where user.id == message.Text.Substring(7)
                                                select user;
 
@@ -305,9 +301,7 @@ namespace Vems_Bot
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
-                                var users = dataBase.Users.ToList();
-
-                                var selectedUser = from user in users
+                                var selectedUser = from user in dataBase.Users
                                                    where user.id == message.Text.Substring(8, 4)
                                                    select user;
 
@@ -331,9 +325,7 @@ namespace Vems_Bot
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
-                                var users = dataBase.Users.ToList();
-
-                                var selectedUser = from user in users
+                                var selectedUser = from user in dataBase.Users
                                                    where user.id == message.Text.Substring(8, 4)
                                                    select user;
 
@@ -357,9 +349,7 @@ namespace Vems_Bot
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
-                                var users = dataBase.Users.ToList();
-
-                                var selectedUser = from user in users
+                                var selectedUser = from user in dataBase.Users
                                                    where user.id == message.Text.Substring(8, 4)
                                                    select user;
 
@@ -382,9 +372,7 @@ namespace Vems_Bot
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
-                                var users = dataBase.Users.ToList();
-
-                                var selectedUser = from user in users
+                                var selectedUser = from user in dataBase.Users
                                                    where user.id == message.Text.Substring(8, 4)
                                                    select user;
 
@@ -407,12 +395,11 @@ namespace Vems_Bot
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
-                                var users = dataBase.Users.ToList();
                                 int numberOfCharactersID = message.Text.Length - 8;
 
                                 if (numberOfCharactersID < 5 && numberOfCharactersID > 0)
                                 {
-                                    var selectedUser = from user in users
+                                    var selectedUser = from user in dataBase.Users
                                                        where message.Text.Substring(8, numberOfCharactersID) ==
                                                        user.id.Substring(0, numberOfCharactersID)
                                                        select user;
