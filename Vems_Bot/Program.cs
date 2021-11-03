@@ -419,6 +419,51 @@ namespace Vems_Bot
                                 }
                             }
                         }
+                        else if (message.Text.Substring(0, 8) == pasword + "note")
+                        {
+                            using (ApplicationContext dataBase = new ApplicationContext())
+                            {
+                                var selectedUser = from user in dataBase.Users
+                                                   where user.id == message.Text.Substring(8, 4)
+                                                   select user;
+
+                                if (!selectedUser.Any())
+                                {
+                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
+                                }
+                                else
+                                {
+                                    foreach (VemsUser user in selectedUser)
+                                    {
+                                        user.note = message.Text.Substring(13);
+                                    }
+                                    await dataBase.SaveChangesAsync();
+                                    await client.SendTextMessageAsync(message.Chat.Id, "Заметка добавлена");
+                                }
+                            }
+                        }
+                        else if (message.Text.Substring(0, 8) == pasword + "getn")
+                        {
+                            using (ApplicationContext dataBase = new ApplicationContext())
+                            {
+                                var selectedUser = from user in dataBase.Users
+                                                   where user.id == message.Text.Substring(8, 4)
+                                                   select user;
+
+                                if (!selectedUser.Any())
+                                {
+                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
+                                }
+                                else
+                                {
+                                    foreach (VemsUser user in selectedUser)
+                                    {
+                                        await client.SendTextMessageAsync(message.Chat.Id, $"Заметка o {user.name} с id{user.id}:\n\n" +
+                                            $"{user.note}");
+                                    }
+                                }
+                            }
+                        }
                         else
                         {
                             unknownMessage = true;

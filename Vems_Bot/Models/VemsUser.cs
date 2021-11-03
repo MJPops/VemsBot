@@ -7,6 +7,7 @@
         public string course { get; set; }
         public string documentLink { get; set; }
         public string description { get; set; }
+        public string note { get; set; }
 
         public VemsUser()
         {
