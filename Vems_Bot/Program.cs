@@ -115,7 +115,7 @@ namespace Vems_Bot
 
             else if (e.CallbackQuery.Data == "О Нас")
             {
-                await client.SendTextMessageAsync(message.Chat.Id, Messages.aboutUs, replyMarkup:Button.GoToStart());
+                await client.SendTextMessageAsync(message.Chat.Id, Messages.aboutUs, replyMarkup: Button.GoToStart());
             }
             else if (e.CallbackQuery.Data == "Преподаватели")
             {
@@ -143,17 +143,8 @@ namespace Vems_Bot
                     lastName: "менеджер",
                     replyMarkup: Button.GoToStart());
             }
-        }
 
-        [Obsolete]
-        private static async void OnMessageHandler(object sender, MessageEventArgs e)
-        {
-            var message = e.Message;
-            bool unknownMessage = false;
-            string pasword = "2143";
-
-
-            if (message.Text == pasword + "users")
+            else if (e.CallbackQuery.Data == "users")
             {
                 using (ApplicationContext dataBase = new ApplicationContext())
                 {
@@ -164,7 +155,404 @@ namespace Vems_Bot
                         await client.SendTextMessageAsync(message.Chat.Id, "Пользователи:");
                         foreach (VemsUser user in users)
                         {
-                            await client.SendTextMessageAsync(message.Chat.Id, $"id{user.id} -- {user.name}");
+                            user.name ??= "Безымянный";
+                            await client.SendTextMessageAsync(message.Chat.Id, $"{user.name}:", replyMarkup: Button.UsersMenu(user.id));
+                        }
+                    }
+                    else
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Пользователи не добавлены");
+                    }
+                }
+            }
+
+            try
+            {
+                if (e.CallbackQuery.Data.Substring(0, 2) == "id")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users.ToList()
+                                           where user.id == e.CallbackQuery.Data.Substring(2)
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            await client.EditMessageTextAsync(message.Chat.Id,
+                                message.MessageId,
+                                $"▫ id: {user.id}\n\n" +
+                                $"▫ Имя: {user.name}\n\n" +
+                                $"▫ Курс: {user.course}\n\n" +
+                                $"▫ Материалы: {user.documentLink}\n\n" +
+                                $"▫ Описание: {user.description}\n\n" +
+                                $"▫ Заметка: {user.note}",
+                                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 6) == "change")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users.ToList()
+                                           where user.id == e.CallbackQuery.Data.Substring(6)
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            await client.EditMessageTextAsync(message.Chat.Id,
+                                message.MessageId,
+                                $"▫ id: {user.id}\n\n" +
+                                $"▫ Имя: {user.name}\n\n" +
+                                $"▫ Курс: {user.course}\n\n" +
+                                $"▫ Материалы: {user.documentLink}\n\n" +
+                                $"▫ Описание: {user.description}\n\n" +
+                                $"▫ Заметка: {user.note}\n\n" +
+                                $"Выберите пункт изменения/добавления",
+                                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "name")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                await client.EditMessageTextAsync(message.Chat.Id,
+                                    message.MessageId,
+                                    $"▫ id: {user.id}\n\n" +
+                                    $"▫ Имя: Изменяется\n\n" +
+                                    $"▫ Курс: {user.course}\n\n" +
+                                    $"▫ Материалы: {user.documentLink}\n\n" +
+                                    $"▫ Описание: {user.description}\n\n" +
+                                    $"▫ Заметка: {user.note}\n\n" +
+                                    $"Выберите пункт для изменения/добавления",
+                                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите имя");
+                                VemsUser.parametrSetingStatus = "name";
+                                VemsUser.userToChange = e.CallbackQuery.Data.Substring(4);
+                            }
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "cour")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                await client.EditMessageTextAsync(message.Chat.Id,
+                                    message.MessageId,
+                                    $"▫ id: {user.id}\n\n" +
+                                    $"▫ Имя: {user.name}\n\n" +
+                                    $"▫ Курс: Изменяется\n\n" +
+                                    $"▫ Материалы: {user.documentLink}\n\n" +
+                                    $"▫ Описание: {user.description}\n\n" +
+                                    $"▫ Заметка: {user.note}\n\n" +
+                                    $"Выберите пункт для изменения/добавления",
+                                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите название курса");
+                                VemsUser.parametrSetingStatus = "cour";
+                                VemsUser.userToChange = e.CallbackQuery.Data.Substring(4);
+                            }
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "link")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                await client.EditMessageTextAsync(message.Chat.Id,
+                                    message.MessageId,
+                                    $"▫ id: {user.id}\n\n" +
+                                    $"▫ Имя: {user.name}\n\n" +
+                                    $"▫ Курс: {user.course}\n\n" +
+                                    $"▫ Материалы: Изменяется\n\n" +
+                                    $"▫ Описание: {user.description}\n\n" +
+                                    $"▫ Заметка: {user.note}\n\n" +
+                                    $"Выберите пункт для изменения/добавления",
+                                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите ссылку");
+                                VemsUser.parametrSetingStatus = "link";
+                                VemsUser.userToChange = e.CallbackQuery.Data.Substring(4);
+                            }
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "desc")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                await client.EditMessageTextAsync(message.Chat.Id,
+                                    message.MessageId,
+                                    $"▫ id: {user.id}\n\n" +
+                                    $"▫ Имя: {user.name}\n\n" +
+                                    $"▫ Курс: {user.course}\n\n" +
+                                    $"▫ Материалы: {user.documentLink}\n\n" +
+                                    $"▫ Описание: Изменяется\n\n" +
+                                    $"▫ Заметка: {user.note}\n\n" +
+                                    $"Выберите пункт для изменения/добавления",
+                                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите описание");
+                                VemsUser.parametrSetingStatus = "desc";
+                                VemsUser.userToChange = e.CallbackQuery.Data.Substring(4);
+                            }
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "note")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                user.note = "";
+                                await client.EditMessageTextAsync(message.Chat.Id,
+                                    message.MessageId,
+                                    $"▫ id: {user.id}\n\n" +
+                                    $"▫ Имя: {user.name}\n\n" +
+                                    $"▫ Курс: {user.course}\n\n" +
+                                    $"▫ Материалы: {user.documentLink}\n\n" +
+                                    $"▫ Описание: {user.description}\n\n" +
+                                    $"▫ Заметка: Изменяется\n\n" +
+                                    $"Выберите пункт для изменения/добавления",
+                                    replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.InChange(user.id));
+
+                                await client.SendTextMessageAsync(message.Chat.Id, "Введите заметку");
+                                VemsUser.parametrSetingStatus = "note";
+                                VemsUser.userToChange = e.CallbackQuery.Data.Substring(4);
+                            }
+                            await dataBase.SaveChangesAsync();
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 3) == "del")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == e.CallbackQuery.Data.Substring(3)
+                                           select user;
+
+                        if (!selectedUser.Any())
+                        {
+                            await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
+                        }
+                        else
+                        {
+                            foreach (VemsUser user in selectedUser)
+                            {
+                                dataBase.Users.RemoveRange(user);
+                            }
+                            await dataBase.SaveChangesAsync();
+                            await client.EditMessageTextAsync(message.Chat.Id,
+                                message.MessageId,
+                                "Пользователь удален");
+                        }
+                    }
+                }
+                else if (e.CallbackQuery.Data.Substring(0, 4) == "user")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users.ToList()
+                                           where user.id == e.CallbackQuery.Data.Substring(4)
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.name ??= "Безымянный";
+
+                            await client.EditMessageTextAsync(message.Chat.Id,
+                                message.MessageId,
+                                $"{user.name}:",
+                                replyMarkup: (Telegram.Bot.Types.ReplyMarkups.InlineKeyboardMarkup)Button.UsersMenu(user.id));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        [Obsolete]
+        private static async void OnMessageHandler(object sender, MessageEventArgs e)
+        {
+            var message = e.Message;
+            bool unknownMessage = false;
+            string pasword = "2143";
+
+            if (message.Text != null)
+            {
+                Console.WriteLine($"Пришло сообщение: {message.Text}");
+            }
+
+            if (VemsUser.parametrSetingStatus != null)
+            {
+                if (VemsUser.parametrSetingStatus == "name")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == VemsUser.userToChange
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.name = message.Text;
+                        }
+                        await dataBase.SaveChangesAsync();
+                        await client.SendTextMessageAsync(message.Chat.Id, "Чтобы увидеть изменение - сверните и разверните или " +
+                            "снова вызовите список учеников", replyMarkup:Button.ToUsers());
+                    }
+                }
+                else if (VemsUser.parametrSetingStatus == "cour")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == VemsUser.userToChange
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.course = message.Text;
+                        }
+                        await dataBase.SaveChangesAsync();
+                        await client.SendTextMessageAsync(message.Chat.Id, "Чтобы увидеть изменение - сверните и разверните или " +
+                            "снова вызовите список учеников", replyMarkup: Button.ToUsers());
+                    }
+                }
+                else if (VemsUser.parametrSetingStatus == "link")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == VemsUser.userToChange
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.documentLink = message.Text;
+                        }
+                        await dataBase.SaveChangesAsync();
+                        await client.SendTextMessageAsync(message.Chat.Id, "Чтобы увидеть изменение - сверните и разверните или " +
+                            "снова вызовите список учеников", replyMarkup: Button.ToUsers());
+                    }
+                }
+                else if (VemsUser.parametrSetingStatus == "desc")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == VemsUser.userToChange
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.description = message.Text;
+                        }
+                        await dataBase.SaveChangesAsync();
+                        await client.SendTextMessageAsync(message.Chat.Id, "Чтобы увидеть изменение - сверните и разверните или " +
+                            "снова вызовите список учеников", replyMarkup: Button.ToUsers());
+                    }
+                }
+                else if (VemsUser.parametrSetingStatus == "note")
+                {
+                    using (ApplicationContext dataBase = new ApplicationContext())
+                    {
+                        var selectedUser = from user in dataBase.Users
+                                           where user.id == VemsUser.userToChange
+                                           select user;
+
+                        foreach (VemsUser user in selectedUser)
+                        {
+                            user.note = message.Text;
+                        }
+                        await dataBase.SaveChangesAsync();
+                        await client.SendTextMessageAsync(message.Chat.Id, "Чтобы увидеть изменение - сверните и разверните или " +
+                            "снова вызовите список учеников", replyMarkup: Button.ToUsers());
+                    }
+                }
+
+                VemsUser.userToChange = null;
+                VemsUser.parametrSetingStatus = null;
+            }
+
+            else if (message.Text == pasword + "users")
+            {
+                using (ApplicationContext dataBase = new ApplicationContext())
+                {
+                    var users = dataBase.Users.ToList();
+
+                    if (users.Any())
+                    {
+                        await client.SendTextMessageAsync(message.Chat.Id, "Пользователи:");
+                        foreach (VemsUser user in users)
+                        {
+                            user.name ??= "Безымянный";
+                            await client.SendTextMessageAsync(message.Chat.Id, $"{user.name}:", replyMarkup: Button.UsersMenu(user.id));
                         }
                     }
                     else
@@ -272,126 +660,9 @@ namespace Vems_Bot
                             }
                         }
                     }
-                    else if (message.Text.Substring(0, 7) == pasword + "del")
-                    {
-                        using (ApplicationContext dataBase = new ApplicationContext())
-                        {
-                            var selectedUser = from user in dataBase.Users
-                                               where user.id == message.Text.Substring(7)
-                                               select user;
-
-                            if (!selectedUser.Any())
-                            {
-                                await client.SendTextMessageAsync(message.Chat.Id, "Такого пользователя не существует");
-                            }
-                            else
-                            {
-                                foreach (VemsUser user in selectedUser)
-                                {
-                                    dataBase.Users.RemoveRange(user);
-                                }
-                                await dataBase.SaveChangesAsync();
-                                await client.SendTextMessageAsync(message.Chat.Id, "Пользователь удален");
-                            }
-                        }
-                    }
                     else if (message.Text.Length >= 8)
                     {
-                        if (message.Text.Substring(0, 8) == pasword + "name")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        user.name = message.Text.Substring(13);
-                                    }
-                                    await dataBase.SaveChangesAsync();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Имя добавлено");
-
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "cour")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        user.course = message.Text.Substring(13);
-                                    }
-                                    await dataBase.SaveChangesAsync();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Наименование курса добавлено");
-                                    
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "link")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        user.documentLink = message.Text.Substring(13);
-                                    }
-                                    await dataBase.SaveChangesAsync();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Ссылка добавлена");
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "desc")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        user.description = message.Text.Substring(13);
-                                    }
-                                    await dataBase.SaveChangesAsync();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Описание добавлено");
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "user")
+                        if (message.Text.Substring(0, 8) == pasword + "user")
                         {
                             using (ApplicationContext dataBase = new ApplicationContext())
                             {
@@ -409,57 +680,16 @@ namespace Vems_Bot
                                         await client.SendTextMessageAsync(message.Chat.Id, "Пользователи:");
                                         foreach (VemsUser user in selectedUser)
                                         {
-                                            await client.SendTextMessageAsync(message.Chat.Id, $"id{user.id} -- {user.name}");
+                                            user.name ??= "Безымянный";
+
+                                            await client.SendTextMessageAsync(message.Chat.Id,
+                                                $"{user.name}:",
+                                                replyMarkup:Button.UsersMenu(user.id));
                                         }
                                     }
                                     else
                                     {
                                         await client.SendTextMessageAsync(message.Chat.Id, "Таких пользователей не обнаружено");
-                                    }
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "note")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        user.note = message.Text.Substring(13);
-                                    }
-                                    await dataBase.SaveChangesAsync();
-                                    await client.SendTextMessageAsync(message.Chat.Id, "Заметка добавлена");
-                                }
-                            }
-                        }
-                        else if (message.Text.Substring(0, 8) == pasword + "getn")
-                        {
-                            using (ApplicationContext dataBase = new ApplicationContext())
-                            {
-                                var selectedUser = from user in dataBase.Users
-                                                   where user.id == message.Text.Substring(8, 4)
-                                                   select user;
-
-                                if (!selectedUser.Any())
-                                {
-                                    await client.SendTextMessageAsync(message.Chat.Id, "id не обнаружен");
-                                }
-                                else
-                                {
-                                    foreach (VemsUser user in selectedUser)
-                                    {
-                                        await client.SendTextMessageAsync(message.Chat.Id, $"Заметка o {user.name} с id{user.id}:\n\n" +
-                                            $"{user.note}");
                                     }
                                 }
                             }

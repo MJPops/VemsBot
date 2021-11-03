@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
+using Vems_Bot.Models;
 
 namespace Vems_Bot
 {
@@ -148,6 +149,57 @@ namespace Vems_Bot
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
             {
                     new List<InlineKeyboardButton>{ InlineKeyboardButton.WithUrl(text: "Материалы", url: link) }
+            });
+            ;
+        }
+        public static IReplyMarkup ToUsers()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Пользователи", callbackData: "users")
+                }
+            });
+            ;
+        }
+        public static IReplyMarkup UsersMenu(string id)
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "id"+id, callbackData: "change"+id)
+                }
+            });
+            ;
+        }
+        public static IReplyMarkup InChange(string id)
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text:"Имя", callbackData: "name"+id)
+                },
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text:"Курс", callbackData: "cour"+id),
+                    InlineKeyboardButton.WithCallbackData(text:"Материалы", callbackData: "link"+id)
+                },
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text:"Описание", callbackData: "desc"+id),
+                    InlineKeyboardButton.WithCallbackData(text:"Заметка", callbackData: "note"+id)
+                },
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Удалить пользователя", callbackData: "del"+id)
+                },
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Свернуть", callbackData: "user"+id)
+                }
             });
             ;
         }

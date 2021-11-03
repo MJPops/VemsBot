@@ -2,6 +2,9 @@
 {
     public class VemsUser
     {
+        public static string parametrSetingStatus = null;
+        public static string userToChange = null;
+
         public string id { get; set; }
         public string name { get; set; }
         public string course { get; set; }
