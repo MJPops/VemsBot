@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Telegram.Bot.Types.ReplyMarkups;
-using Vems_Bot.Models;
 
 namespace Vems_Bot
 {
@@ -16,7 +15,7 @@ namespace Vems_Bot
                         InlineKeyboardButton.WithCallbackData(text: "Преподаватели", callbackData: "Преподаватели")},
                     new List<InlineKeyboardButton>{
                         InlineKeyboardButton.WithCallbackData(text: "Контакты", callbackData: "Контакты"),
-                        InlineKeyboardButton.WithCallbackData(text: "Анкета для регистрации", callbackData: "Анкета для регистрации")}
+                        InlineKeyboardButton.WithCallbackData(text: "Запись на курс", callbackData: "Анкета для регистрации")}
             });
             ;
         }
@@ -43,7 +42,7 @@ namespace Vems_Bot
             });
             ;
         }
-        public static IReplyMarkup CoursesStartBack(string backTo)
+        public static IReplyMarkup CoursesToStart(string backTo)
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
             {
@@ -152,18 +151,7 @@ namespace Vems_Bot
             });
             ;
         }
-        public static IReplyMarkup ToUsers()
-        {
-            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
-            {
-                new List<InlineKeyboardButton>
-                {
-                    InlineKeyboardButton.WithCallbackData(text: "Пользователи", callbackData: "users")
-                }
-            });
-            ;
-        }
-        public static IReplyMarkup UsersMenu(string id)
+        public static IReplyMarkup UserMenu(string id)
         {
             return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
             {
@@ -199,6 +187,17 @@ namespace Vems_Bot
                 new List<InlineKeyboardButton>
                 {
                     InlineKeyboardButton.WithCallbackData(text: "Свернуть", callbackData: "user"+id)
+                }
+            });
+            ;
+        }
+        public static IReplyMarkup ToUsers()
+        {
+            return new InlineKeyboardMarkup(new List<List<InlineKeyboardButton>>
+            {
+                new List<InlineKeyboardButton>
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "Пользователи", callbackData: "users")
                 }
             });
             ;
